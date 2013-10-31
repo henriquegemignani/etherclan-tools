@@ -1,0 +1,3 @@
+[submodule "etherclan"]
+	path = etherclan
+	url = git@github.com:henriquegemignani/etherclan.git
