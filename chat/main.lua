@@ -50,7 +50,6 @@ module ('chat', package.seeall) do
   function love.update (dt)
     inc = inc + dt
     if inc > 10.0 then
-      server:create_new_out_connections()
       inc = 0.0
     end
 
@@ -60,6 +59,9 @@ module ('chat', package.seeall) do
   function love.keypressed (button)
     if button == "escape" then
       love.event.push "quit"
+
+    elseif button == "end" then
+      server:create_new_out_connections()
 
     elseif button == 'return' then
       send_message(table.concat(prompt_message))
