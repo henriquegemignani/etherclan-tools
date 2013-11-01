@@ -34,7 +34,7 @@ module ('chat', package.seeall) do
 
   function love.load (args)
     --love.graphics.setMode(800, 400, false, false, 0)
-    love.graphics.setNewFont(20)
+    love.graphics.setNewFont(18)
     text_height = love.graphics.getFont():getHeight()
 
     db = etherclan.database.create()
@@ -43,7 +43,7 @@ module ('chat', package.seeall) do
     server = etherclan.server.create(db, 0.01)
     server:start()
     function server.node.services.chat(self, msg)
-      table.insert(previous_messages, 1, "Other: " .. msg)
+      table.insert(previous_messages, 1, self.ip .. ": " .. msg)
     end
   end
 
@@ -64,6 +64,7 @@ module ('chat', package.seeall) do
       server:create_new_out_connections()
 
     elseif button == 'return' then
+      if #prompt_message == 0 then return end
       send_message(table.concat(prompt_message))
 
       prompt_message = {}
