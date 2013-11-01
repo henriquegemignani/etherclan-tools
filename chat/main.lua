@@ -1,5 +1,13 @@
 module ('chat', package.seeall) do
 
+  require 'etherclan.database'
+  require 'etherclan.server'
+  local socket = require 'socket'
+
+  local db
+  local server
+
+  local inc = 0.0
   local previous_messages = {}
   local prompt_cursor = 1
   local prompt_message_cache = "> "
@@ -13,15 +21,40 @@ module ('chat', package.seeall) do
 
   function send_message(msg)
     table.insert(previous_messages, 1, "You: " .. msg)
+    for _, node in pairs(db.known_nodes) do
+      if node.services.chat then
+        local s = socket.tcp()
+        if s:connect(node.ip, node.port) then
+          s:send("SERVICE CHAT " .. msg .. "\n")
+          s:close()
+        end
+      end
+    end
   end
 
   function love.load (args)
     --love.graphics.setMode(800, 400, false, false, 0)
     love.graphics.setNewFont(20)
     text_height = love.graphics.getFont():getHeight()
+
+    db = etherclan.database.create()
+    db:add_node{ uuid = "??", ip = "localhost", port = 8001 }
+
+    server = etherclan.server.create(db, 0.01)
+    server:start()
+    function server.node.services.chat(self, msg)
+      table.insert(previous_messages, 1, "Other: " .. msg)
+    end
   end
 
   function love.update (dt)
+    inc = inc + dt
+    if inc > 10.0 then
+      server:create_new_out_connections()
+      inc = 0.0
+    end
+
+    server:step()
   end
 
   function love.keypressed (button)
