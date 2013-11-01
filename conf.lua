@@ -1,9 +1,9 @@
 
 function love.conf(t)
-  t.title = "Vikings"         -- The title of the window the game is in (string)
-  t.author = "USPGameDev"     -- The author of the game (string)
-  t.url = "uspgamedev.org"    -- The website of the game (string)
-  t.identity = "vikings"      -- The name of the save directory (string)
+  t.title = "Etherclan Tools"         -- The title of the window the game is in (string)
+  t.author = "Henrique Gemignani"     -- The author of the game (string)
+  t.url = "https://github.com/henriquegemignani/etherclan-tools"    -- The website of the game (string)
+  t.identity = "etherclan-tools"      -- The name of the save directory (string)
   t.version = "0.8.0"         -- The LÖVE version this game was made for (string)
   t.console = true            -- Attach a console (boolean, Windows only)
   t.release = false           -- Enable release mode (boolean)

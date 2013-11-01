@@ -23,17 +23,12 @@ module ('chat', package.seeall) do
     table.insert(previous_messages, 1, "You: " .. msg)
     for _, node in pairs(db.known_nodes) do
       if server.node.uuid ~= node.uuid and node.services.chat then
-        local s = socket.tcp()
-        if s:connect(node.ip, node.port) then
-          s:send("SERVICE CHAT " .. msg .. "\n")
-          s:close()
-        end
+        server:send_message(node.uuid, etherclan.commands.service, "CHAT", msg)
       end
     end
   end
 
   function love.load (args)
-    --love.graphics.setMode(800, 400, false, false, 0)
     love.graphics.setNewFont(18)
     text_height = love.graphics.getFont():getHeight()
 
