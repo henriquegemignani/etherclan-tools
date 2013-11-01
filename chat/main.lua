@@ -22,7 +22,7 @@ module ('chat', package.seeall) do
   function send_message(msg)
     table.insert(previous_messages, 1, "You: " .. msg)
     for _, node in pairs(db.known_nodes) do
-      if node.services.chat then
+      if server.node.uuid ~= node.uuid and node.services.chat then
         local s = socket.tcp()
         if s:connect(node.ip, node.port) then
           s:send("SERVICE CHAT " .. msg .. "\n")
@@ -38,7 +38,7 @@ module ('chat', package.seeall) do
     text_height = love.graphics.getFont():getHeight()
 
     db = etherclan.database.create()
-    db:add_node{ uuid = "??", ip = "localhost", port = 8001 }
+    db:add_node("??", "localhost", 8001)
 
     server = etherclan.server.create(db, 0.01)
     server:start()
